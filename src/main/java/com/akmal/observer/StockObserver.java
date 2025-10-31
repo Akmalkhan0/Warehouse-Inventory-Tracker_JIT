@@ -1,7 +1,7 @@
 package com.akmal.observer;
 
-import com.akmal.model.Product;
+import com.akmal.model.InventoryItem;
 
 public interface StockObserver {
-    void onLowStock(Product product);
+    void onLowStock(InventoryItem product);
 }

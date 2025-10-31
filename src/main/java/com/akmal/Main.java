@@ -1,5 +1,6 @@
 package com.akmal;
 
+import com.akmal.model.InventoryItem;
 import com.akmal.model.Product;
 import com.akmal.observer.AlertService;
 import com.akmal.service.Warehouse;
@@ -19,10 +20,14 @@ public class Main {
 
         warehouse.registerObserver(alertService);
 
-        Product laptop = new Product("L001", "Laptop", 5, 20);
-        Product mouse = new Product("M002", "Mouse", 10, 50);
-        warehouse.addProduct(laptop);
-        warehouse.addProduct(mouse);
+        Product laptopProduct = new Product("L001", "Laptop");
+        Product mouseProduct = new Product("M002", "Mouse");
+
+        InventoryItem laptopItem = new InventoryItem(laptopProduct, 20, 5);
+        InventoryItem mouseItem = new InventoryItem(mouseProduct, 50, 10);
+
+        warehouse.addInventoryItem(laptopItem);
+        warehouse.addInventoryItem(mouseItem);
 
         System.out.println("--- Warehouse System Initialized ---");
         System.out.println("Pre-loaded: Laptop (ID: L001) and Mouse (ID: M002)");
@@ -85,11 +90,15 @@ public class Main {
         String id = scanner.nextLine();
         System.out.print("Enter Product Name: ");
         String name = scanner.nextLine();
+
+        Product newProduct = new Product(id, name);
+
         int threshold = getIntInput("Enter Reorder Threshold: ");
         int quantity = getIntInput("Enter Initial Quantity: ");
 
-        Product newProduct = new Product(id, name, threshold, quantity);
-        warehouse.addProduct(newProduct);
+        InventoryItem newItem = new InventoryItem(newProduct, quantity, threshold);
+
+        warehouse.addInventoryItem(newItem);
     }
 
     private static void receiveShipment() {
@@ -116,10 +125,7 @@ public class Main {
     }
 
     private static void checkAllStock() {
-        System.out.println("\n--- Full Inventory Status ---");
-        warehouse.printStockStatus("L001");
-        warehouse.printStockStatus("M002");
-        System.out.println("(Note: This demo only checks pre-loaded items)");
+        warehouse.printAllStock();
     }
 
 
